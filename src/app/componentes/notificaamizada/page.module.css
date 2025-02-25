@@ -1,0 +1,119 @@
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #2b0040;
+    color: white;
+  }
+  
+  .leftPanel {
+    width: 450px;
+    background-color: #1b002c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+  
+  .logo {
+    width: 80px;
+    height: 80px;
+    background-color: #690d76;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .iconeContainer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 10px;
+  }
+  
+  .icone {
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .icone:hover {
+    transform: scale(1.1);
+  }
+  
+  .rightPanel {
+    flex: 1;
+    padding: 30px;
+    margin: auto;
+    max-width: 700px;
+    background-image: linear-gradient(to right, #800080, #000);
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+  
+  .header {
+    text-align: center;
+    font-size: 30px;
+    color: rgb(255, 255, 255);
+  }
+  
+  .friendRequest {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-image: linear-gradient(to right, #800080, #000);
+    border-radius: 10px;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profileIcon {
+    width: 60px;
+    height: 60px;
+    background-color: #550066;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .acceptBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .acceptBtn:hover {
+    background-color: #45a049;
+  }
+  
+  .declineBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .declineBtn:hover {
+    background-color: #e53935;
+  }
+  

@@ -1,0 +1,52 @@
+
+
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(90deg, #4a004b, #620d67);
+  }
+  
+  .formBox {
+    background: linear-gradient(#800080, black);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: rgb(238, 238, 238);
+  }
+  
+  .h2 {
+    margin-bottom: 20px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .button {
+    width: 100%;
+    padding: 10px;
+    background-color: darkgreen;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .p {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  

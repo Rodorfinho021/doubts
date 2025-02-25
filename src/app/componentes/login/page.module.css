@@ -1,0 +1,85 @@
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(90deg, #640164, #2b2b2b);
+    font-family: Arial, sans-serif;
+  }
+  
+  .loginForm {
+    background: linear-gradient(#800080, black);
+    padding: 30px; /* Aumentado o padding para aumentar o tamanho do card */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    width: 350px; /* Aumentado a largura do card */
+    color: rgb(255, 255, 255);
+  }
+  
+  .h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .inputGroup {
+    margin-bottom: 15px;
+  }
+  
+  .inputGroup label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .inputGroup input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .forgotPassword {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .forgotPassword a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .forgotPassword a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Novo estilo para o link "Cadastrar-se" */
+  .register {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .register a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .register a:hover {
+    text-decoration: underline;
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 10px;
+    background-color: darkgreen;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #000;
+  }
+  
+  .submitButton:hover {
+    background-color: #bbb;
+  }
+  

@@ -1,0 +1,127 @@
+
+.container {
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(to right, #4a0072, #000);
+    display: flex;
+    height: 100vh;
+    color: white;
+  }
+  
+  .homeIcon {
+    position: absolute;
+    top: 2px;
+    left: 20px;
+  }
+  
+  .homeIcon img {
+    width: 30px;
+    height: auto;
+  }
+  
+  .links:hover {
+    color: yellow;
+  }
+  
+  
+  .sidebar {
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .sidebar ul li {
+    width: 100%;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    padding-left: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 10px 0;
+    border-radius: 8px;
+  }
+  
+  .sidebar ul li a img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  .pai {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 40px;
+  }
+  
+  .content {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: left;
+  }
+  
+  .h2 {
+    margin-bottom: 20px;
+    color: #ffffff;
+    font-size: 20px;
+  }
+  
+  .switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0;
+    font-size: 16px;
+    color: white;
+  }
+  
+  .switch input {
+    display: none;
+  }
+  
+  .switch .slider {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+    background-color: #ff0000;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+  
+  .switch .slider:before {
+    content: '';
+    position: absolute;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: 0.3s;
+  }
+  
+  input:checked + .slider {
+    background-color: #66bb6a;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(25px);
+  }
+  

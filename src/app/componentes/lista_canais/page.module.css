@@ -1,0 +1,150 @@
+.divPrincipal {
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to right, #800080, #000 100%);
+    display: flex;
+    align-items: flex-start;  
+    box-sizing: border-box;
+    overflow: hidden;  
+    font-family: Arial, sans-serif;
+  }
+  
+  .conteinerLateral {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.44);
+    z-index: 10;
+    padding: 10px;
+    justify-content: space-between;
+    overflow-y: auto; 
+  }
+  
+  .carde {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .carde:hover {
+    transform: scale(1.1);
+  }
+  
+  .botao {
+    background-image: linear-gradient(to right, #a71aa7, #000 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .botao:hover {
+    background-color: #000;
+  }
+  
+  .carImg {
+    margin-right: 10px;
+  }
+  
+  .modificaImg {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .carde p {
+    font-size: 15px;
+    margin-left: 50px;
+    text-align: center;
+  }
+  
+  .menssagemBarra {
+    position: fixed;
+    bottom: 10px;
+    left: 310px;
+    right: 10px;
+    max-width: calc(100% - 320px);  
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.44);
+    border-radius: 10px;
+    z-index: 20; 
+  }
+  
+  .menssagemInput {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .botaoEnviar {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    border: 2px solid #fff;
+  }
+  
+  .logo {
+    max-width: 80%;
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border: 3px solid #35424a;
+    margin-top: auto;
+    margin-bottom: 200px;
+  }
+  
+  .iconeConteiner {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding-bottom: 20px;
+  }
+  
+  .icone {
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .icone:hover {
+    transform: scale(1.1);
+  }
+  
+  .hide {
+    display: none;
+  }
+  
+  .mostrarMais {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .mostrarMais:hover {
+    text-decoration: underline;
+  }
+  
