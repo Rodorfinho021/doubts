@@ -32,7 +32,7 @@ const NotificacoesPage = () => {
                 <ul>
                     <li><a className={styles.links} href="/">Minha Conta</a></li>
                     <li><a className={styles.links} href=""> Notificações</a></li>
-                    <li><a className={styles.links} href="componentes/aparencia"> Aparência</a></li>
+                    <li><a className={styles.links} href="/componentes/aparencia"> Aparência</a></li>
                 </ul>
             </div>
 
