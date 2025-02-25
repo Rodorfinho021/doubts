@@ -30,9 +30,9 @@ const NotificacoesPage = () => {
 
             <div className={styles.sidebar}>
                 <ul>
-                    <li><a className={styles.links} href="/componentes/tela_perfil">Minha Conta</a></li>
+                    <li><a className={styles.links} href="/">Minha Conta</a></li>
                     <li><a className={styles.links} href=""> Notificações</a></li>
-                    <li><a className={styles.links} href=""> Aparência</a></li>
+                    <li><a className={styles.links} href="componentes/aparencia"> Aparência</a></li>
                 </ul>
             </div>
 
