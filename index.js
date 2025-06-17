@@ -336,6 +336,6 @@ app.get('/canais',  (req, res) => {
 });
 
 // Inicia o servidor
-app.listen(3001, () => {
+app.listen(443, () => {
   console.log('🚀 Servidor rodando em https://apidoubts.dev.vilhena.ifro.edu.br');
 });
