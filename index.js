@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar CORS
 app.use(cors({
-  origin: 'http://localhost:3000',  // Liberar apenas para seu frontend
+  origin: 'https://apidoubts.dev.vilhena.ifro.edu.br',  // Liberar apenas para seu frontend
   credentials: true
 }));
 
@@ -87,7 +87,7 @@ app.post('/uploads-canais', uploadCanais.single('imagem'), (req, res) => {
     return res.status(400).json({ error: 'Nenhuma imagem enviada' });
   }
 
-  const fotoUrl = `http://localhost:3001/uploads_canais/${imagem.filename}`;
+  const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
   res.status(200).json({ url: fotoUrl });
 });
 
@@ -107,7 +107,7 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
     console.log('Descrição:', descricao);
     console.log('Imagem:', imagem);
 
-    const fotoUrl = `http://localhost:3001/uploads_canais/${imagem.filename}`;
+    const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
     const idUsuario = req.user.id; // Assumindo que o ID do usuário está no token
 
     // Log do que vai ser passado para a função
@@ -146,7 +146,7 @@ app.get('/perfil/:id', async (req, res) => {
       return res.status(404).json({ mensagem: 'Foto não encontrada' });
     }
 
-    res.json({ url: `http://localhost:3001/uploads/${resultado.foto_url}` });
+    res.json({ url: `https://apidoubts.dev.vilhena.ifro.edu.br/uploads/${resultado.foto_url}` });
   } catch (error) {
     console.error('Erro ao buscar a foto do usuário:', error);
     res.status(500).json({ mensagem: 'Erro ao buscar a foto' });
@@ -339,5 +339,5 @@ app.get('/canais',  (req, res) => {
 
 // Inicia o servidor
 app.listen(3001, () => {
-  console.log('🚀 Servidor rodando em http://localhost:3001');
+  console.log('🚀 Servidor rodando em https://apidoubts.dev.vilhena.ifro.edu.br');
 });
