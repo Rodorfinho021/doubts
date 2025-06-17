@@ -26,10 +26,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar CORS
-app.use(cors({
-  origin: 'https://doubts.dev.vilhena.ifro.edu.br',  // Liberar apenas para seu frontend
-  credentials: true
-}));
+app.use(cors());
+
 
 // Expõe a pasta 'uploads' para acesso público
 app.use('/uploads', express.static('uploads'));
