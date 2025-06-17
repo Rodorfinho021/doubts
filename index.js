@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar CORS
 app.use(cors({
-  origin: 'https://apidoubts.dev.vilhena.ifro.edu.br',  // Liberar apenas para seu frontend
+  origin: 'https://doubts.dev.vilhena.ifro.edu.br',  // Liberar apenas para seu frontend
   credentials: true
 }));
 
