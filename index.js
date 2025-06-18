@@ -26,9 +26,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar CORS
-app.use(cors(
-  {origin:"*"})
-);
+import cors from 'cors';
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://doubts.dev.vilhena.ifro.edu.br'], // <-- adicione o domínio correto
+  credentials: true
+}));
+
 
 
 // Expõe a pasta 'uploads' para acesso público
