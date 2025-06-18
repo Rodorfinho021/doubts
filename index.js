@@ -26,7 +26,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar CORS
-app.use(cors());
+app.use(cors(
+  {origin:"*"})
+);
 
 
 // Expõe a pasta 'uploads' para acesso público
