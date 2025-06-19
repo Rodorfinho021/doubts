@@ -25,11 +25,10 @@ app.use(uploadCanaisRoutes);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Habilitar CORS
-import cors from 'cors';
 
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://doubts.dev.vilhena.ifro.edu.br'], // <-- adicione o domínio correto
+
+app.options('*', cors({
+  origin: ['http://localhost:3000', 'https://doubts.dev.vilhena.ifro.edu.br'],
   credentials: true
 }));
 
@@ -111,7 +110,7 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
     console.log('Descrição:', descricao);
     console.log('Imagem:', imagem);
 
-    const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
+    const fotoUrl = ` https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
     const idUsuario = req.user.id; // Assumindo que o ID do usuário está no token
 
     // Log do que vai ser passado para a função
