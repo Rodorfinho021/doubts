@@ -27,11 +27,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-app.options('*', cors({
-  origin: ['http://localhost:3000', 'https://doubts.dev.vilhena.ifro.edu.br'],
-  credentials: true
-}));
+const allowedOrigins = [
+  'https://doubts.dev.vilhena.ifro.edu.br',
+  'http://localhost:3000' // opcional, se quiser manter para testes
+];
 
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true // se você estiver usando cookies ou headers de autenticação
+}));
 
 
 // Expõe a pasta 'uploads' para acesso público
