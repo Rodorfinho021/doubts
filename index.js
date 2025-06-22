@@ -21,7 +21,7 @@ const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
 app.use(uploadRoutes); // Certifique-se de que as rotas de upload de usuários estão sendo usadas
 app.use(uploadCanaisRoutes);
 
-// Configuração do BodyParser
+// Configuração do BodyPars
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
