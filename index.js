@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   'https://doubts.dev.vilhena.ifro.edu.br',
-  'http://localhost:3000' // opcional, se quiser manter para testes
+  'http://localhost:3001' // opcional, se quiser manter para testes
 ];
 
 app.use(cors({
