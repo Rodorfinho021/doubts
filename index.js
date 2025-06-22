@@ -28,9 +28,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 const allowedOrigins = [
-  'https://doubts.dev.vilhena.ifro.edu.br',
-  'http://localhost:3001' // opcional, se quiser manter para testes
+  'https://doubts.dev.vilhena.ifro.edu.br'
 ];
+
 
 app.use(cors({
   origin: function (origin, callback) {
