@@ -31,18 +31,18 @@ const allowedOrigins = [
   'https://doubts.dev.vilhena.ifro.edu.br'
 ];
 
-
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('Origem da requisição:', origin);  // <-- ADICIONE ESTE LOG PRA TER CERTEZA
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true // se você estiver usando cookies ou headers de autenticação
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 
 // Expõe a pasta 'uploads' para acesso público
 app.use('/uploads', express.static('uploads'));
