@@ -27,18 +27,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-const allowedOrigins = ['https://doubts.dev.vilhena.ifro.edu.br', 'http://localhost:3000'];
+const allowedOrigins = [
+  'https://doubts.dev.vilhena.ifro.edu.br',
+  'http://localhost:3000'
+];
 
 app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // para requests de ferramentas como Postman
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+  origin: function (origin, callback) {
+    console.log('Origem da requisição:', origin); // <-- Para debug
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-    return callback(null, true);
   },
-  credentials: true // para aceitar cookies/sessões
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Expõe a pasta 'uploads' para acesso público
