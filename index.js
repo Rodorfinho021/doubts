@@ -14,18 +14,6 @@ import uploadCanaisRoutes from './db/upload_canais.js'; // Roteamento para uploa
 import fs from 'fs';
 
 const app = express();
-const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
-
-
-
-app.use(uploadRoutes); // Certifique-se de que as rotas de upload de usuários estão sendo usadas
-app.use(uploadCanaisRoutes);
-
-// Configuração do BodyPars
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 const allowedOrigins = [
   'https://doubts.dev.vilhena.ifro.edu.br',
@@ -45,6 +33,21 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
+
+
+
+app.use(uploadRoutes); // Certifique-se de que as rotas de upload de usuários estão sendo usadas
+app.use(uploadCanaisRoutes);
+
+// Configuração do BodyPars
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+
 
 // Expõe a pasta 'uploads' para acesso público
 app.use('/uploads', express.static('uploads'));
