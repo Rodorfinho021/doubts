@@ -4,17 +4,29 @@ import cors from 'cors';
 import multer from 'multer';
 import path from 'path';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
 
-// Banco de dados e serviços
-import conexao from './config/db.js';
+// Seus imports de banco de dados ou outros serviços
 import { cadastrarUsuario, listarUsuarios, modificarUsuario, deletarUsuario, salvarCaminhoImagemNoBanco, buscarFotoUsuarioPorId } from './db/usuarios.js';
 import { buscarTodosCanais, buscarCanaisPorUsuario, criarCanal, adicionarUsuarioCanal, enviarMensagem, verificarDonoCanal, atualizarCanal, excluirCanal } from './db/canais.js';
+import conexao from './config/db.js';
+import uploadRoutes from './db/upload.js'; // Roteamento para uploads gerais
+import uploadCanaisRoutes from './db/upload_canais.js'; // Roteamento para upload de imagens de canais
+import fs from 'fs';
 
 const app = express();
-const JWT_SECRET = 'seu-segredo-jwt'; // Substitua por variável de ambiente em produção
+const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
 
-// ✅ CORS configurado corretamente antes de qualquer rota
+
+
+app.use(uploadRoutes); // Certifique-se de que as rotas de upload de usuários estão sendo usadas
+app.use(uploadCanaisRoutes);
+
+// Configuração do BodyPars
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
 const allowedOrigins = [
   'https://doubts.dev.vilhena.ifro.edu.br',
   'http://localhost:3000'
@@ -22,6 +34,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('Origem da requisição:', origin); // <-- Para debug
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -30,28 +43,56 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.options('*', cors()); // Preflight requests
-
-// ✅ Body parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// ✅ Servir pastas públicas
+// Expõe a pasta 'uploads' para acesso público
 app.use('/uploads', express.static('uploads'));
 app.use('/uploads_canais', express.static('uploads_canais'));
 
-// ✅ Multer para uploads
+
+
+
+// Definir o middleware de autenticação
+function autenticarUsuario(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(403).send('Token de autenticação não fornecido');
+
+  // Verifica se o token começa com "Bearer "
+  const tokenParts = authHeader.split(' ');
+  if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
+    return res.status(401).send('Formato de token inválido');
+  }
+
+  const token = tokenParts[1]; // Agora pegamos apenas o JWT
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).send('Token inválido');
+    req.user = decoded;
+    next();
+  });
+}
+
+
+// Configuração do Multer para upload de imagens dos usuários
 const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'), // Padrão para upload de imagens de usuários
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
+});
+
+// Configuração do Multer para upload de imagens de canais
+const storageCanais = multer.diskStorage({
   destination: (req, file, cb) => {
-    fs.mkdirSync('uploads/', { recursive: true });
-    cb(null, 'uploads/');
+    const dir = 'uploads_canais/';
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
   },
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 
+// Inicializa o Multer
+const upload = multer({ storage });
+const uploadCanais = multer({ storage: storageCanais });
 
 // Rotas para upload de imagens de canais
 app.post('/uploads-canais', uploadCanais.single('imagem'), (req, res) => {
@@ -64,9 +105,6 @@ app.post('/uploads-canais', uploadCanais.single('imagem'), (req, res) => {
   const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
   res.status(200).json({ url: fotoUrl });
 });
-
-const upload = multer({ storage });
-const uploadCanais = multer({ storage: storageCanais });
 
 // Rota para criação de canais
 app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), async (req, res) => {
