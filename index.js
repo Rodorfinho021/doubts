@@ -51,7 +51,7 @@ app.use('/uploads_canais', express.static('uploads_canais'));
 
 
 
-// Definir o middleware de autenticação JWT
+// Definir o middleware de autenticação
 function autenticarUsuario(req, res, next) {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(403).send('Token de autenticação não fornecido');
