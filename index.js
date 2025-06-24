@@ -33,7 +33,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    console.log('Origem da requisição:', origin);  // <-- ADICIONE ESTE LOG PRA TER CERTEZA
+    console.log('Origem da requisição:', origin); // <-- Para debug
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -41,6 +41,7 @@ app.use(cors({
     }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -134,17 +135,6 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
     res.status(500).json({ error: 'Erro ao criar canal' });
   }
 });
-
-
-
-
-
-
-
-
-
-
-
 
 
 
