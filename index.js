@@ -51,8 +51,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
-const upload = multer({ storage });
-const uploadCanais = multer({ storage: storageCanais });
+
 
 // Rotas para upload de imagens de canais
 app.post('/uploads-canais', uploadCanais.single('imagem'), (req, res) => {
@@ -65,6 +64,9 @@ app.post('/uploads-canais', uploadCanais.single('imagem'), (req, res) => {
   const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
   res.status(200).json({ url: fotoUrl });
 });
+
+const upload = multer({ storage });
+const uploadCanais = multer({ storage: storageCanais });
 
 // Rota para criação de canais
 app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), async (req, res) => {
