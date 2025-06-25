@@ -125,7 +125,7 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
     console.log('Descrição:', descricao);
     console.log('Imagem:', imagem);
 
-    const fotoUrl = ` https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
+    const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
     const idUsuario = req.user.id; // Assumindo que o ID do usuário está no token
 
     // Log do que vai ser passado para a função
