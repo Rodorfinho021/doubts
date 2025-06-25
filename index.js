@@ -4,17 +4,15 @@ import cors from 'cors';
 import multer from 'multer';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
-// Seus imports de banco de dados ou outros serviços
+// Seus imports
 import { cadastrarUsuario, listarUsuarios, modificarUsuario, deletarUsuario, salvarCaminhoImagemNoBanco, buscarFotoUsuarioPorId } from './db/usuarios.js';
 import { buscarTodosCanais, buscarCanaisPorUsuario, criarCanal, adicionarUsuarioCanal, enviarMensagem, verificarDonoCanal, atualizarCanal, excluirCanal } from './db/canais.js';
 import conexao from './config/db.js';
-import uploadRoutes from './db/upload.js'; // Roteamento para uploads gerais
-import uploadCanaisRoutes from './db/upload_canais.js'; // Roteamento para upload de imagens de canais
-import fs from 'fs';
-
-
-const { v4: uuidv4 } = require('uuid');
+import uploadRoutes from './db/upload.js';
+import uploadCanaisRoutes from './db/upload_canais.js';
 
 const app = express();
 
@@ -23,9 +21,10 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
+// ✅ CORS configurado no topo
 app.use(cors({
   origin: function (origin, callback) {
-    console.log('Origem da requisição:', origin); // <-- Para debug
+    console.log('Origem da requisição:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -37,41 +36,32 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
+// ✅ Suporte global e individual a OPTIONS
+app.options('*', cors());
+app.options('/_cadastrar_canal', cors());
 
+const JWT_SECRET = 'seu-segredo-jwt';
 
-
-app.use(uploadRoutes); // Certifique-se de que as rotas de upload de usuários estão sendo usadas
-app.use(uploadCanaisRoutes);
-
-// Configuração do BodyPars
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(uploadRoutes);
+app.use(uploadCanaisRoutes);
 
-
-
-
-
-// Expõe a pasta 'uploads' para acesso público
+// Pastas públicas
 app.use('/uploads', express.static('uploads'));
 app.use('/uploads_canais', express.static('uploads_canais'));
 
-
-
-
-// Definir o middleware de autenticação
+// Middleware de autenticação
 function autenticarUsuario(req, res, next) {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(403).send('Token de autenticação não fornecido');
 
-  // Verifica se o token começa com "Bearer "
   const tokenParts = authHeader.split(' ');
   if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
     return res.status(401).send('Formato de token inválido');
   }
 
-  const token = tokenParts[1]; // Agora pegamos apenas o JWT
-
+  const token = tokenParts[1];
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) return res.status(401).send('Token inválido');
     req.user = decoded;
@@ -79,48 +69,41 @@ function autenticarUsuario(req, res, next) {
   });
 }
 
-
-// Configuração do Multer para upload de imagens dos usuários
+// Multer - usuários
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'), // Padrão para upload de imagens de usuários
+  destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 
-// Configuração do Multer para upload de imagens de canais
+// Multer - canais
 const storageCanais = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = 'uploads_canais/';
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
-  
   filename: (req, file, cb) => {
     const uniqueName = `${Date.now()}-${uuidv4()}${path.extname(file.originalname)}`;
     cb(null, uniqueName);
   }
 });
 
-// Inicializa o Multer
 const upload = multer({ storage });
 const uploadCanais = multer({ storage: storageCanais });
 
-// Rotas para upload de imagens de canais
+// Rota de upload de imagem de canal
 app.post('/uploads-canais', uploadCanais.single('imagem'), (req, res) => {
   const imagem = req.file;
-
-  if (!imagem) {
-    return res.status(400).json({ error: 'Nenhuma imagem enviada' });
-  }
+  if (!imagem) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
 
   const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
   res.status(200).json({ url: fotoUrl });
 });
 
-// Rota para criação de canais
+// ✅ Rota de criação de canal com upload
 app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), async (req, res) => {
   try {
     console.log('Requisição recebida');
-    
     const { nome, descricao } = req.body;
     const imagem = req.file;
 
@@ -128,26 +111,18 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
       return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
 
-    console.log('Nome:', nome);
-    console.log('Descrição:', descricao);
-    console.log('Imagem:', imagem);
+    const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
+    const idUsuario = req.user.id;
 
-    const fotoUrl = ` https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
-    const idUsuario = req.user.id; // Assumindo que o ID do usuário está no token
-
-    // Log do que vai ser passado para a função
     console.log('Passando dados para criarCanal:', nome, descricao, fotoUrl, idUsuario);
 
-    await criarCanal(nome, descricao, fotoUrl, idUsuario); // ajuste conforme sua função real
-
+    await criarCanal(nome, descricao, fotoUrl, idUsuario);
     res.status(200).json({ mensagem: 'Canal criado com sucesso' });
   } catch (err) {
-    console.error('Erro ao criar canal:', err); // Isso vai mostrar o erro no backend
+    console.error('Erro ao criar canal:', err);
     res.status(500).json({ error: 'Erro ao criar canal' });
   }
 });
-
-
 
 
 app.get('/perfil/:id', async (req, res) => {
