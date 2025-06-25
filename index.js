@@ -13,6 +13,9 @@ import uploadRoutes from './db/upload.js'; // Roteamento para uploads gerais
 import uploadCanaisRoutes from './db/upload_canais.js'; // Roteamento para upload de imagens de canais
 import fs from 'fs';
 
+
+const { v4: uuidv4 } = require('uuid');
+
 const app = express();
 
 const allowedOrigins = [
@@ -90,7 +93,11 @@ const storageCanais = multer.diskStorage({
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
+  
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  }
 });
 
 // Inicializa o Multer
