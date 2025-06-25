@@ -318,6 +318,9 @@ app.get('/meus_canais', autenticarUsuario, (req, res) => {
   });
 });
 
+app.options('/canais', cors()); // habilita CORS para pré-flight
+
+
 // Buscar todos canais
 app.get('/canais',  (req, res) => {
   buscarTodosCanais((err, canais) => {
