@@ -20,27 +20,22 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    console.log('Origem da requisição:', origin); // <-- Para debug
+const corsOptions = {
+  origin: (origin, callback) => {
+    console.log('Origem da requisição:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+      callback(null, origin); // Reflete a origem exatamente
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
-}));
-app.options('*', cors());
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 
 
 const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
