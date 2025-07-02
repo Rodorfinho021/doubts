@@ -14,30 +14,6 @@ import uploadCanaisRoutes from './db/upload_canais.js'; // Roteamento para uploa
 import fs from 'fs';
 
 const app = express();
-
-const allowedOrigins = [
-  'https://doubts.dev.vilhena.ifro.edu.br',
-  'http://localhost:3000'
-];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    console.log('Origem da requisição:', origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // Reflete a origem exatamente
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
-};
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
-
-
 const JWT_SECRET = 'seu-segredo-jwt'; // Altere com o seu segredo para JWT
 
 
@@ -51,7 +27,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
+const allowedOrigins = [
+  'https://doubts.dev.vilhena.ifro.edu.br'
+];
 
+app.use(cors({
+  origin: function (origin, callback) {
+    console.log('Origem da requisição:', origin);  // <-- ADICIONE ESTE LOG PRA TER CERTEZA
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Expõe a pasta 'uploads' para acesso público
 app.use('/uploads', express.static('uploads'));
@@ -129,7 +120,7 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
     console.log('Descrição:', descricao);
     console.log('Imagem:', imagem);
 
-    const fotoUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
+    const fotoUrl = ` https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${imagem.filename}`;
     const idUsuario = req.user.id; // Assumindo que o ID do usuário está no token
 
     // Log do que vai ser passado para a função
@@ -143,6 +134,17 @@ app.post('/_cadastrar_canal', autenticarUsuario, uploadCanais.single('imagem'), 
     res.status(500).json({ error: 'Erro ao criar canal' });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
 
 
 

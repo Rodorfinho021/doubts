@@ -76,26 +76,13 @@ export function buscarCanaisPorUsuario(usuario_id, callback) {
     });
   }
 
-export function buscarTodosCanais(callback) {
-  const sql = `SELECT id, nome, foto_url, usuario_criador_id FROM canais`;
-  conexao.query(sql, (err, results) => {
-    if (err) return callback(err, null);
-
-    // Mapear para adicionar o domínio completo caso foto_url seja só o nome do arquivo
-    const baseUrl = 'https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/';
-    const resultsComUrlCompleta = results.map(canal => {
-      return {
-        ...canal,
-        foto_url: canal.foto_url.startsWith('http')
-          ? canal.foto_url
-          : baseUrl + canal.foto_url
-      };
+  export function buscarTodosCanais(callback) {
+    const sql = `SELECT id, nome, foto_url, usuario_criador_id FROM canais`;
+    conexao.query(sql, (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results);
     });
-
-    callback(null, resultsComUrlCompleta);
-  });
-}
-
+  }
 
   
   
@@ -112,26 +99,9 @@ export function atualizarFotoCanais(canalId, fotoUrl) {
 }
 
   
-export function buscarCanaisPorUsuario(usuario_id, callback) {
-  const sql = `
-    SELECT c.id, c.nome, c.descricao, c.foto_url, c.data_criacao
-    FROM usuarios_canais uc
-    JOIN canais c ON uc.canal_id = c.id
-    WHERE uc.usuario_id = ?
-  `;
-  conexao.query(sql, [usuario_id], (err, results) => {
-    if (err) return callback(err, null);
-
-    const baseUrl = 'https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/';
-    const resultsComUrlCompleta = results.map(canal => {
-      return {
-        ...canal,
-        foto_url: canal.foto_url.startsWith('http')
-          ? canal.foto_url
-          : baseUrl + canal.foto_url
-      };
-    });
-
-    callback(null, resultsComUrlCompleta);
-  });
-}
+  
+  // Função para buscar a URL da foto do usuário
+  export async function buscarFotoCanalPorId(id) {
+    const [rows] = await conexao.promise().query('SELECT foto_url FROM canais WHERE id = ?', [id]);
+    return rows[0];
+  }
