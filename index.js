@@ -166,6 +166,7 @@ app.get('/perfil/:id', async (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
+   console.log('Requisição recebida no /login:', req.body); 
   const { email, senha } = req.body;
   if (!email || !senha) {
     return res.status(400).json({ mensagem: 'Email e senha são obrigatórios!' });
