@@ -34,7 +34,8 @@ router.post('/upload', upload.single('imagem'), async (req, res) => {
     await atualizarFotoUsuario(userId, imagem);
 
     // Retorna a URL da imagem para o front-end
-    res.json({ url: `uploads/${imagem}` });
+    res.json({ url: `https://apidoubts.dev.vilhena.ifro.edu.br/uploads/${imagem}` });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensagem: 'Erro ao salvar a imagem' });
