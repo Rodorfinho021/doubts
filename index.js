@@ -167,15 +167,17 @@ app.get('/perfil/:id', async (req, res) => {
 // Login
 app.post('/login', (req, res) => {
   const { email, senha } = req.body;
-  if (!email || !senha) return res.status(400).send('Email e senha são obrigatórios!');
+  if (!email || !senha) {
+    return res.status(400).json({ mensagem: 'Email e senha são obrigatórios!' });
+  }
 
   const sql = 'SELECT * FROM usuarios WHERE email = ?';
   conexao.query(sql, [email], (err, results) => {
-    if (err) return res.status(500).send('Erro no servidor');
-    if (results.length === 0) return res.status(401).send('Usuário não encontrado');
+    if (err) return res.status(500).json({ mensagem: 'Erro no servidor' });
+    if (results.length === 0) return res.status(401).json({ mensagem: 'Usuário não encontrado' });
 
     const usuario = results[0];
-    if (usuario.senha !== senha) return res.status(401).send('Senha incorreta');
+    if (usuario.senha !== senha) return res.status(401).json({ mensagem: 'Senha incorreta' });
 
     const token = jwt.sign(
       { id: usuario.id, nome: usuario.nome, email: usuario.email },
@@ -189,11 +191,12 @@ app.post('/login', (req, res) => {
         id: usuario.id,
         nome: usuario.nome,
         email: usuario.email,
-        foto: usuario.foto_url || '' // se tiver
+        foto: usuario.foto_url || ''
       }
     });
   });
 });
+
 
 
 // Cadastro
