@@ -82,3 +82,24 @@ export async function buscarFotoUsuarioPorId(id) {
 }
 
 
+
+// Função para buscar usuários com filtro por nome ou email
+// Buscar usuários filtrando apenas pelo nome
+
+export function buscarUsuariosFiltro(search, callback) {
+  let sql = 'SELECT id, nome, foto_url FROM usuarios';
+  const params = [];
+
+  if (search && search.trim() !== '') {
+    sql += ' WHERE nome LIKE ?';
+    params.push(`%${search}%`);
+  } else {
+    return callback(null, []);
+  }
+
+  conexao.query(sql, params, (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+

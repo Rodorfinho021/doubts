@@ -47,6 +47,7 @@ export function verificarDonoCanal(canal_id, callback) {
 
 // Função para atualizar um canal
 export function atualizarCanal(id, nome, descricao, foto_url, callback) {
+  
   const sql = 'UPDATE canais SET nome = ?, descricao = ?, foto_url = ? WHERE id = ?';
   conexao.query(sql, [nome, descricao, foto_url, id], (err, result) => {
     if (err) return callback(err, null);
@@ -64,25 +65,47 @@ export function excluirCanal(id, callback) {
 }
 
 export function buscarCanaisPorUsuario(usuario_id, callback) {
-    const sql = `
-      SELECT c.id, c.nome, c.descricao, c.foto_url, c.data_criacao
-      FROM usuarios_canais uc
-      JOIN canais c ON uc.canal_id = c.id
-      WHERE uc.usuario_id = ?
-    `;
-    conexao.query(sql, [usuario_id], (err, results) => {
-      if (err) return callback(err, null);
-      callback(null, results);
-    });
+  const sql = `
+    SELECT c.id, c.nome, c.descricao, c.foto_url, c.data_criacao, c.usuario_criador_id
+    FROM usuarios_canais uc
+    JOIN canais c ON uc.canal_id = c.id
+    WHERE uc.usuario_id = ?
+  `;
+  conexao.query(sql, [usuario_id], (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+
+
+export function buscarTodosCanais(callback) {
+  const sql = `SELECT id, nome, foto_url, usuario_criador_id FROM canais`;
+  conexao.query(sql, (err, results) => {
+    if (err) return callback(err, null);
+const canaisComUrl = results.map(canal => {
+  let imagemUrl = '';
+
+  if (!canal.foto_url || canal.foto_url.trim() === '') {
+    imagemUrl = 'https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/default_canal.png';
+  } else if (canal.foto_url.startsWith('http')) {
+    imagemUrl = canal.foto_url; // caso raro
+  } else {
+    imagemUrl = `https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/${canal.foto_url}`;
   }
 
-  export function buscarTodosCanais(callback) {
-    const sql = `SELECT id, nome, foto_url, usuario_criador_id FROM canais`;
-    conexao.query(sql, (err, results) => {
-      if (err) return callback(err, null);
-      callback(null, results);
-    });
-  }
+  return {
+    ...canal,
+    imagem: imagemUrl
+  };
+});
+
+
+    callback(null, canaisComUrl);
+  });
+}
+
+
+
 
   
   

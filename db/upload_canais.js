@@ -28,7 +28,7 @@ router.post('/upload_canais', uploadCanais.single('imagem'), async (req, res) =>
     await atualizarFotoCanais(canalId, imagem);
 
     // Retorna a URL para o front-end
-    res.json({ url: `uploads_canais/${imagem}` });
+  res.json({ filename: imagem }); // só o nome mesmo
   } catch (error) {
     console.error('Erro ao enviar imagem do canal:', error);
     res.status(500).json({ mensagem: 'Erro no servidor' });
