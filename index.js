@@ -760,9 +760,10 @@ app.get('/notificacoes/canais', autenticarUsuario, async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar notificações' });
   }
 });
-app.post('/responder_compartilhamento', async (req, res) => {
+app.post('/responder_compartilhamento', autenticarUsuario, async (req, res) => {
   const { id, acao } = req.body;
-  const usuario_id = req.usuario_id; // Supondo que você extraiu do token
+  const usuario_id = req.usuario_id;
+ // Supondo que você extraiu do token
 
   try {
     // Busca os dados do convite
