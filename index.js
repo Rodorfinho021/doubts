@@ -760,44 +760,68 @@ app.get('/notificacoes/canais', autenticarUsuario, async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar notificações' });
   }
 });
-
-app.post('/responder_compartilhamento', autenticarUsuario, async (req, res) => {
-  const usuarioId = req.user.id;
+app.post('/responder_compartilhamento', async (req, res) => {
   const { id, acao } = req.body;
+  const usuario_id = req.usuario_id; // Supondo que você extraiu do token
 
   try {
-    const novoStatus = acao === 'aceitar' ? 'aceita' : 'recusada';
-
-    const [result] = await conexao.promise().query(
-      'UPDATE solicitacoes_canais SET status = ? WHERE id = ? AND para_usuario_id = ?',
-      [novoStatus, id, usuarioId]
+    // Busca os dados do convite
+    const [convites] = await conexao.promise().query(
+      'SELECT canal_id FROM convites_canais WHERE id = ?',
+      [id]
     );
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ mensagem: 'Solicitação não encontrada' });
+    if (convites.length === 0) {
+      return res.status(404).json({ mensagem: 'Convite não encontrado.' });
     }
 
+    const canal_id = convites[0].canal_id;
+
     if (acao === 'aceitar') {
-      // Descobrir canal_id
-      const [[solicitacao]] = await conexao.promise().query(
-        'SELECT canal_id FROM solicitacoes_canais WHERE id = ?',
+      // Verifica se já participa
+      const [jaParticipa] = await conexao.promise().query(
+        'SELECT * FROM usuarios_canais WHERE usuario_id = ? AND canal_id = ?',
+        [usuario_id, canal_id]
+      );
+
+      if (jaParticipa.length > 0) {
+        return res.json({
+          mensagem: 'Você já participa deste canal.',
+          ja_participa: true,
+          canal_id
+        });
+      }
+
+      // Insere o usuário no canal
+      await conexao.promise().query(
+        'INSERT INTO usuarios_canais (usuario_id, canal_id) VALUES (?, ?)',
+        [usuario_id, canal_id]
+      );
+
+      // Remove o convite
+      await conexao.promise().query(
+        'DELETE FROM convites_canais WHERE id = ?',
         [id]
       );
 
-      const canalId = solicitacao.canal_id;
-
+      return res.json({ mensagem: 'Você entrou no canal com sucesso!', canal_id });
+    } else if (acao === 'recusar') {
+      // Apenas remove o convite
       await conexao.promise().query(
-        'INSERT INTO usuarios_canais (usuario_id, canal_id) VALUES (?, ?)',
-        [usuarioId, canalId]
+        'DELETE FROM convites_canais WHERE id = ?',
+        [id]
       );
+
+      return res.json({ mensagem: 'Convite ignorado com sucesso.' });
     }
 
-    res.status(200).json({ mensagem: `Solicitação ${novoStatus}` });
-  } catch (err) {
-    console.error('Erro ao responder solicitação de canal:', err);
-    res.status(500).json({ erro: 'Erro interno do servidor' });
+    res.status(400).json({ mensagem: 'Ação inválida.' });
+  } catch (error) {
+    console.error('Erro ao responder convite de canal:', error);
+    res.status(500).json({ mensagem: 'Erro interno ao processar o convite.' });
   }
 });
+
 
 
 
